@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.Text
-import androidx.tv.material3.TextField
+import androidx.compose.material3.TextField
 import com.animehub.tv.data.Media
 import com.animehub.tv.ui.components.MediaCard
 import com.animehub.tv.ui.theme.TextPrimary

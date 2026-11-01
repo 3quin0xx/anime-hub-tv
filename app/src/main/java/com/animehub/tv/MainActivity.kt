@@ -30,7 +30,7 @@ import com.animehub.tv.ui.SearchScreen
 import com.animehub.tv.ui.theme.AnimeHubTheme
 import kotlinx.coroutines.launch
 
-private enum class Tab { HOME, BROWSE, SEARCH, MY_LIST, SETTINGS }
+private enum class NavTab { HOME, BROWSE, SEARCH, MY_LIST, SETTINGS }
 
 private sealed interface Screen {
     data object Home : Screen
@@ -59,7 +59,7 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     private fun App() {
-        var tab by remember { mutableStateOf(Tab.HOME) }
+        var tab by remember { mutableStateOf(NavTab.HOME) }
         var screen by remember { mutableStateOf<Screen>(Screen.Home) }
         var searchResults by remember { mutableStateOf<List<Media>>(emptyList()) }
         var myList by remember { mutableStateOf<List<Media>>(emptyList()) }
@@ -79,27 +79,28 @@ class MainActivity : ComponentActivity() {
                 Text("ANIME HUB")
             }
             TabRow(selectedTabIndex = tab.ordinal) {
-                Tab.values().forEach { item ->
+                NavTab.values().forEach { item ->
                     Tab(
                         selected = tab == item,
+                        onClick = { tab = item; screen = when (item) { NavTab.HOME -> Screen.Home; NavTab.BROWSE -> Screen.Home; NavTab.SEARCH -> Screen.Search; NavTab.MY_LIST -> Screen.MyList; NavTab.SETTINGS -> Screen.Settings } },
                         onFocus = {
                             tab = item
                             screen = when (item) {
-                                Tab.HOME -> Screen.Home
-                                Tab.BROWSE -> Screen.Home
-                                Tab.SEARCH -> Screen.Search
-                                Tab.MY_LIST -> Screen.MyList
-                                Tab.SETTINGS -> Screen.Settings
+                                NavTab.HOME -> Screen.Home
+                                NavTab.BROWSE -> Screen.Home
+                                NavTab.SEARCH -> Screen.Search
+                                NavTab.MY_LIST -> Screen.MyList
+                                NavTab.SETTINGS -> Screen.Settings
                             }
                         },
                     ) {
                         Text(
                             when (item) {
-                                Tab.HOME -> "Home"
-                                Tab.BROWSE -> "Browse"
-                                Tab.SEARCH -> "Search"
-                                Tab.MY_LIST -> "My List"
-                                Tab.SETTINGS -> "Settings"
+                                NavTab.HOME -> "Home"
+                                NavTab.BROWSE -> "Browse"
+                                NavTab.SEARCH -> "Search"
+                                NavTab.MY_LIST -> "My List"
+                                NavTab.SETTINGS -> "Settings"
                             },
                         )
                     }
