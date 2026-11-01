@@ -30,7 +30,13 @@ import com.animehub.tv.ui.SearchScreen
 import com.animehub.tv.ui.theme.AnimeHubTheme
 import kotlinx.coroutines.launch
 
-private enum class NavTab { HOME, BROWSE, SEARCH, MY_LIST, SETTINGS }
+private enum class NavTab {
+    HOME,
+    BROWSE,
+    SEARCH,
+    MY_LIST,
+    SETTINGS,
+}
 
 private sealed interface Screen {
     data object Home : Screen
@@ -41,11 +47,6 @@ private sealed interface Screen {
     data object Settings : Screen
 }
 
-/**
- * TV entry point. Tabs are at the top, exactly as in the mockups:
- * Home, Browse, Search, My List, Settings. Browse currently reuses Home's
- * trending data; Search and My List are their own screens.
- */
 @OptIn(ExperimentalTvMaterial3Api::class)
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,7 +60,7 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     private fun App() {
-        var tab by remember { mutableStateOf(NavNavTab.HOME) }
+        var tab by remember { mutableStateOf(NavTab.HOME) }
         var screen by remember { mutableStateOf<Screen>(Screen.Home) }
         var searchResults by remember { mutableStateOf<List<Media>>(emptyList()) }
         var myList by remember { mutableStateOf<List<Media>>(emptyList()) }
@@ -79,34 +80,35 @@ class MainActivity : ComponentActivity() {
                 Text("ANIME HUB")
             }
             TabRow(selectedTabIndex = tab.ordinal) {
-                NavNavTab.values().forEach { item ->
+                NavTab.values().forEach { item ->
+                    val selectTab = {
+                        tab = item
+                        screen = when (item) {
+                            NavTab.HOME -> Screen.Home
+                            NavTab.BROWSE -> Screen.Home
+                            NavTab.SEARCH -> Screen.Search
+                            NavTab.MY_LIST -> Screen.MyList
+                            NavTab.SETTINGS -> Screen.Settings
+                        }
+                    }
                     Tab(
                         selected = tab == item,
-                        onClick = { tab = item; screen = when (item) { NavTab.HOME -> Screen.Home; NavTab.BROWSE -> Screen.Home; NavTab.SEARCH -> Screen.Search; NavTab.MY_LIST -> Screen.MyList; NavTab.SETTINGS -> Screen.Settings } },
-                        onClick = { tab = item; screen = when (item) { NavNavTab.HOME -> Screen.Home; NavNavTab.BROWSE -> Screen.Home; NavNavTab.SEARCH -> Screen.Search; NavNavTab.MY_LIST -> Screen.MyList; NavNavTab.SETTINGS -> Screen.Settings } },
-                        onFocus = {
-                            tab = item
-                            screen = when (item) {
-                                NavNavTab.HOME -> Screen.Home
-                                NavNavTab.BROWSE -> Screen.Home
-                                NavNavTab.SEARCH -> Screen.Search
-                                NavNavTab.MY_LIST -> Screen.MyList
-                                NavNavTab.SETTINGS -> Screen.Settings
-                            }
-                        },
+                        onFocus = selectTab,
+                        onClick = selectTab,
                     ) {
                         Text(
                             when (item) {
-                                NavNavTab.HOME -> "Home"
-                                NavNavTab.BROWSE -> "Browse"
-                                NavNavTab.SEARCH -> "Search"
-                                NavNavTab.MY_LIST -> "My List"
-                                NavNavTab.SETTINGS -> "Settings"
+                                NavTab.HOME -> "Home"
+                                NavTab.BROWSE -> "Browse"
+                                NavTab.SEARCH -> "Search"
+                                NavTab.MY_LIST -> "My List"
+                                NavTab.SETTINGS -> "Settings"
                             },
                         )
                     }
                 }
             }
+
             when (val current = screen) {
                 is Screen.Home -> HomeScreen(
                     onOpenDetails = { screen = Screen.Details(it) },
