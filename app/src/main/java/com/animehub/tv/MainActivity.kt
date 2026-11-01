@@ -59,7 +59,7 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     private fun App() {
-        var tab by remember { mutableStateOf(NavTab.HOME) }
+        var tab by remember { mutableStateOf(NavNavTab.HOME) }
         var screen by remember { mutableStateOf<Screen>(Screen.Home) }
         var searchResults by remember { mutableStateOf<List<Media>>(emptyList()) }
         var myList by remember { mutableStateOf<List<Media>>(emptyList()) }
@@ -79,28 +79,29 @@ class MainActivity : ComponentActivity() {
                 Text("ANIME HUB")
             }
             TabRow(selectedTabIndex = tab.ordinal) {
-                NavTab.values().forEach { item ->
+                NavNavTab.values().forEach { item ->
                     Tab(
                         selected = tab == item,
                         onClick = { tab = item; screen = when (item) { NavTab.HOME -> Screen.Home; NavTab.BROWSE -> Screen.Home; NavTab.SEARCH -> Screen.Search; NavTab.MY_LIST -> Screen.MyList; NavTab.SETTINGS -> Screen.Settings } },
+                        onClick = { tab = item; screen = when (item) { NavNavTab.HOME -> Screen.Home; NavNavTab.BROWSE -> Screen.Home; NavNavTab.SEARCH -> Screen.Search; NavNavTab.MY_LIST -> Screen.MyList; NavNavTab.SETTINGS -> Screen.Settings } },
                         onFocus = {
                             tab = item
                             screen = when (item) {
-                                NavTab.HOME -> Screen.Home
-                                NavTab.BROWSE -> Screen.Home
-                                NavTab.SEARCH -> Screen.Search
-                                NavTab.MY_LIST -> Screen.MyList
-                                NavTab.SETTINGS -> Screen.Settings
+                                NavNavTab.HOME -> Screen.Home
+                                NavNavTab.BROWSE -> Screen.Home
+                                NavNavTab.SEARCH -> Screen.Search
+                                NavNavTab.MY_LIST -> Screen.MyList
+                                NavNavTab.SETTINGS -> Screen.Settings
                             }
                         },
                     ) {
                         Text(
                             when (item) {
-                                NavTab.HOME -> "Home"
-                                NavTab.BROWSE -> "Browse"
-                                NavTab.SEARCH -> "Search"
-                                NavTab.MY_LIST -> "My List"
-                                NavTab.SETTINGS -> "Settings"
+                                NavNavTab.HOME -> "Home"
+                                NavNavTab.BROWSE -> "Browse"
+                                NavNavTab.SEARCH -> "Search"
+                                NavNavTab.MY_LIST -> "My List"
+                                NavNavTab.SETTINGS -> "Settings"
                             },
                         )
                     }
