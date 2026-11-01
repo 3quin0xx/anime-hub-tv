@@ -46,7 +46,6 @@ dependencies {
 
     // Compose for TV
     implementation("androidx.tv:tv-material:1.0.0")
-    implementation("androidx.tv:tv-foundation:1.0.0")
 
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
